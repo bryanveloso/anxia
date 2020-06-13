@@ -5,10 +5,10 @@ A work-in-progress Twitter client mindfully designed for those with social media
 ## Reference: Navigational Layout
 
 - `Stack.Navigator`
-  - `Home` (`Tab.Navigator`)
+  - `Login` (`Screen`)
+  - `Home` (`Drawer.Navigator`)
     - `Timeline` (`Screen`)
     - `Mentions` (`Screen`)
-  - `Profile` (`Screen`)
-  - `Settings` (`Screen`)
+    - `Profile` (`Screen`)
+    - `Settings` (`Screen`)
     - `About` (`Screen`)
-  - `Login` (`Screen`)
