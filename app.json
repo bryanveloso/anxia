@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "anxia",
+    "name": "Anxia",
     "slug": "anxia",
+    "scheme": "anxia",
     "platforms": [
       "ios",
       "android",
