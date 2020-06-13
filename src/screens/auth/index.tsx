@@ -1,4 +1,5 @@
 import * as AuthSession from "expo-auth-session";
+import * as SecureStore from 'expo-secure-store';
 import React, { useCallback, useState } from "react";
 import { Button, View, Text } from 'react-native'
 
@@ -57,6 +58,9 @@ export default function AuthScreen() {
       // Now let's store the username in our state to render it.
       // You might want to store the `oauth_token` and `oauth_token_secret` for future use.
       setUsername(accessTokens.screen_name);
+      await SecureStore.setItemAsync('token', accessTokens.oauth_token);
+      await SecureStore.setItemAsync('token_secret', accessTokens.oauth_token_secret);
+
     } catch (error) {
       console.log("Something went wrong...", error);
       setError(error.message);
@@ -67,7 +71,8 @@ export default function AuthScreen() {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button onPress={onLogin} title="Login with Twitter" />
+      {!username ? (<Button onPress={onLogin} title="Login with Twitter" />) : (<Text>Hi {username}!</Text>) }
+      
     </View>
   )
 }
