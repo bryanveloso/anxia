@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { ActivityIndicator, Text, TouchableOpacity, TouchableOpacityProps } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -13,11 +13,13 @@ export default function LoginButton(props: TouchableOpacityProps) {
   return (
     // @ts-ignore
     <TouchableOpacity {...props} onPress={() => dispatch(login())}>
-      {accessTokenState === AccessTokenState.Fetching ?
-        <ActivityIndicator /> : (
-          <><Text>{Strings.AUTHENTICATION_BUTTON_TEXT}</Text></>
-        )
-      }
+      {accessTokenState === AccessTokenState.Fetching ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          <Text>{Strings.AUTHENTICATION_BUTTON_TEXT}</Text>
+        </>
+      )}
     </TouchableOpacity>
   )
 }
