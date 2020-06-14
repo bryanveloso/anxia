@@ -1,5 +1,6 @@
 import { registerRootComponent } from 'expo'
 import React from 'react'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
@@ -11,7 +12,9 @@ function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <Navigation />
+        <SafeAreaProvider>
+          <Navigation />
+        </SafeAreaProvider>
       </ThemeProvider>
     </Provider>
   )

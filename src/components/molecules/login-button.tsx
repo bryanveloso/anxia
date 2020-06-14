@@ -22,6 +22,7 @@ export function LoginButton(props: TouchableOpacityProps) {
       onPress={() => dispatch(login())}
       sx={{
         alignItems: 'center',
+        alignSelf: 'stretch',
         backgroundColor: 'twitterBlue',
         borderRadius: 4,
         display: 'flex',
