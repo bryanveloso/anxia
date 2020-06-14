@@ -1,16 +1,17 @@
-import React from "react";
-import { Button, View, Text } from 'react-native'
-import { maybeCompleteAuthSession } from "expo-web-browser";
+import { maybeCompleteAuthSession } from 'expo-web-browser'
+import React from 'react'
 
-import LoginButton from "../../components/atoms/login-button";
+import { Strings } from '@constants'
+import { LoginButton } from '@molecules'
+import { Text, View } from '@styled'
 
 export default function AuthScreen() {
   maybeCompleteAuthSession()
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <LoginButton />      
+      <LoginButton />
+      <Text>{Strings.DATA_DISCLAIMER}</Text>
     </View>
   )
 }
-

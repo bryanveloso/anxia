@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   extends: ['universe/native', 'universe/shared/typescript-analysis'],
   overrides: [
     {
@@ -8,4 +9,11 @@ module.exports = {
       },
     },
   ],
+  settings: {
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+      },
+    },
+  },
 }

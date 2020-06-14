@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": "./src",
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
     "lib": ["dom", "esnext"],
@@ -8,6 +8,35 @@
     "noEmit": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "strict": true
+    "strict": true,
+    "paths": {
+      "@assets/*": [
+        "./assets/*"
+      ],
+      "@atoms": [
+        "./components/atoms"
+      ],
+      "@constants": [
+        "./constants"
+      ],
+      "@molecules": [
+        "./components/molecules"
+      ],
+      "@screens": [
+        "./screens"
+      ],
+      "@store": [
+        "./store"
+      ],
+      "@store/*": [
+        "./store/*"
+      ],
+      "@styled": [
+        "./components/styled"
+      ],
+      "@styles": [
+        "./styles"
+      ]
+    },    
   }
 }

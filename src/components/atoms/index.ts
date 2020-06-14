@@ -1,1 +1,1 @@
-export { default as LoginButton } from './login-button'
+export { ButtonText } from './button-text'
