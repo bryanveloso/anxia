@@ -9,11 +9,11 @@ export enum AccessTokenState {
   Found
 }
 
-export const checkToken = createAsyncThunk('login/checkToken', async () => {
+export const checkToken = createAsyncThunk('auth/checkToken', async () => {
   await Twitter.getCredentials()
 })
 
-export const login = createAsyncThunk('login/login', async (dispatch: any) => {
+export const login = createAsyncThunk('auth/login', async (dispatch: any) => {
   const accessToken = await Twitter.login()
   if (!accessToken) throw new Error()
     
@@ -22,11 +22,17 @@ export const login = createAsyncThunk('login/login', async (dispatch: any) => {
 })
 
 const authSlice = createSlice({
-  name: 'login',
+  name: 'auth',
   initialState: {
     accessToken: AccessTokenState.Unknown
   },
-  reducers: {},
+  reducers: {
+    logout(state, action) {
+      SecureStore.deleteItemAsync('accessToken')
+      SecureStore.deleteItemAsync('accessTokenSecret')
+      state.accessToken = AccessTokenState.Unknown
+    }
+  },
   extraReducers: builder => {
     builder.addCase(checkToken.pending, state => {
       state.accessToken = AccessTokenState.Fetching
@@ -49,5 +55,7 @@ const authSlice = createSlice({
     })
   }
 })
+
+export const { logout } = authSlice.actions
 
 export default authSlice

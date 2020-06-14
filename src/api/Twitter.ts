@@ -97,15 +97,15 @@ export class Twitter {
     return { token, tokenSecret }
   }
 
-  private async createAuthHeader() {
+  private async prepareAuth() {
     const credentials = await this.getCredentials()
     const encodedCredentials = Base64.btoa(`${credentials.token}:${credentials.tokenSecret}`)
-    return `Basic ${encodedCredentials}`
+    return encodedCredentials
   }
 
   async getAccountInfo(): Promise<Account> {
     const request = new Request(`${this.options.backend.host}${this.options.backend.endpoints.accountInfo}`)
-    const header = await this.createAuthHeader()
+    const header = await this.prepareAuth()
     request.headers.set('Authorization', header)
 
     const { profilePictureURL, username } = await (await fetch(request)).json()
@@ -123,7 +123,7 @@ const defaultOptions = {
   backend: {
     host: 'https://proxy.anxia.app',
     endpoints: {
-      accountInfo: '/accounts/info',
+      accountInfo: '/account/settings',
       requestToken: '/auth/request_token',
       accessToken: '/auth/access_token',
     },
