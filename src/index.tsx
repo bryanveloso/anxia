@@ -1,14 +1,16 @@
-import registerRootComponent from 'expo/build/launch/registerRootComponent';
+import registerRootComponent from 'expo/build/launch/registerRootComponent'
 import React, { useState } from 'react'
+import { Provider } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
 
+import store from './store'
 import AuthScreen from './screens/auth'
 import DetailsScreen from './screens/detail'
 import HomeScreen from './screens/home'
 import TimelineScreen from './screens/timeline'
 import MentionsScreen from './screens/mentions'
-import SplashScreen from './screens/splash';
+import SplashScreen from './screens/splash'
 
 const Stack = createStackNavigator()
 
@@ -30,9 +32,11 @@ function Switcher() {
 
 function App() {
   return (
-    <NavigationContainer>
-      <Switcher />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Switcher />
+      </NavigationContainer>
+    </Provider>
   )
 }
 

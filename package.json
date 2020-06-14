@@ -17,6 +17,7 @@
     "expo": "~37.0.3",
     "expo-auth-session": "^1.2.1",
     "expo-secure-store": "~8.1.0",
+    "js-base64": "^2.5.2",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
@@ -24,13 +25,16 @@
     "react-native-reanimated": "~1.7.0",
     "react-native-safe-area-context": "0.7.3",
     "react-native-screens": "~2.2.0",
-    "react-native-web": "~0.11.7"
+    "react-native-web": "~0.11.7",
+    "react-redux": "^7.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
     "@types/": "react-navigation/native",
+    "@types/js-base64": "^2.3.1",
     "@types/react": "~16.9.23",
     "@types/react-native": "~0.61.17",
+    "@types/react-redux": "^7.1.9",
     "babel-preset-expo": "~8.1.0",
     "remove": "^0.1.5",
     "typescript": "~3.8.3"
