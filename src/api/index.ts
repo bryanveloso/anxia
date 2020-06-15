@@ -30,6 +30,7 @@ interface TwitterOptions {
     endpoints: {
       accountInfo: string
       requestToken: string
+      homeTimeline: string
       accessToken: string
       usersShow: string
     }
@@ -105,7 +106,7 @@ export class Twitter {
     const id = await SecureStore.getItemAsync('id')
     const token = await SecureStore.getItemAsync('accessToken')
     const tokenSecret = await SecureStore.getItemAsync('accessTokenSecret')
-    const username = await SecureStore.getItemAsync('accessTokenSecret')
+    const username = await SecureStore.getItemAsync('username')
 
     if (!id || !token || !tokenSecret || !username) {
       throw new Error('Missing or incomplete credentials.')
@@ -143,9 +144,18 @@ export class Twitter {
       username: response.screen_name,
       description: response.description,
       profileBackground: response.profile_image_url_https,
-      profileImage: response.profile_image_url_https,
+      profileImage: response.profile_image_url_https.replace('_normal', ''),
       location: response.location,
     }
+  }
+
+  async getHomeTimeline() {
+    const request = new Request(`${this.options.backend.host}${this.options.backend.endpoints.homeTimeline}`)
+    const header = await this.prepareAuth()
+    request.headers.set('Authorization', header)
+
+    const response = await (await fetch(request)).json()
+    console.log(response)
   }
 }
 
@@ -161,6 +171,7 @@ const defaultOptions = {
     endpoints: {
       accessToken: '/auth/access_token',
       accountInfo: '/account/settings',
+      homeTimeline: '/statuses/home_timeline',
       requestToken: '/auth/request_token',
       usersShow: '/users/show',
     },
