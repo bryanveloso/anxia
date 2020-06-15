@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
     "lib": ["dom", "esnext"],
@@ -10,41 +10,38 @@
     "resolveJsonModule": true,
     "strict": true,
     "paths": {
+      "@api": [
+        "src/api"
+      ],
       "@assets/*": [
-        "./assets/*"
+        "src/assets/*"
       ],
       "@atoms": [
-        "./components/atoms"
+        "src/components/atoms"
       ],
       "@constants": [
-        "./constants"
+        "src/constants"
       ],
       "@molecules": [
-        "./components/molecules"
-      ],
-      "@navigations": [
-        "./components/navigations"
+        "src/components/molecules"
       ],
       "@navigations/*": [
-        "./components/navigations/*"
+        "src/components/navigations/*"
       ],
       "@organisms": [
-        "./components/organisms"
+        "src/components/organisms"
       ],
       "@screens": [
-        "./screens"
-      ],
-      "@store": [
-        "./store"
+        "src/screens"
       ],
       "@store/*": [
-        "./store/*"
+        "src/store/*"
       ],
       "@styled": [
-        "./components/styled"
+        "src/components/styled"
       ],
-      "@styles": [
-        "./styles"
+      "@styles/*": [
+        "src/styles/*"
       ]
     },    
   }
