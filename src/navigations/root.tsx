@@ -1,6 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NavigationContainer } from '@react-navigation/native'
 import React, { useEffect } from 'react'
+import { Dimensions } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { AuthScreen } from '@screens'
@@ -11,6 +12,7 @@ import { getAccountInfo } from '@store/user'
 import MentionsNavigation from './mentions'
 import TimelineNavigation from './timeline'
 
+const dw = Dimensions.get('window').width
 const Drawer = createDrawerNavigator()
 
 export default function Navigation() {
@@ -31,7 +33,7 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       {hasAccessToken ? (
-        <Drawer.Navigator initialRouteName="Timeline">
+        <Drawer.Navigator initialRouteName="Timeline" drawerType="slide" hideStatusBar>
           <Drawer.Screen name="Timeline" component={TimelineNavigation} />
           <Drawer.Screen name="Mentions" component={MentionsNavigation} />
         </Drawer.Navigator>
