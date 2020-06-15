@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { FullUser } from 'twitter-d'
 
-import Twitter, { Profile } from '../../api'
+import Twitter from '../../api'
 
 export const getAccountInfo = createAsyncThunk('user/getAccountInfo', async () => {
   return Twitter.getAccountInfo()
@@ -16,15 +17,8 @@ export enum LoadingState {
   Found,
 }
 
-interface State {
-  profile: Profile
-}
-
-const initialState: State = {
-  profile: {
-    id: '',
-    username: '',
-  },
+const initialState = {
+  profile: {} as FullUser,
 }
 
 const userSlice = createSlice({

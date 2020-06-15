@@ -16,16 +16,17 @@ const Drawer = createDrawerNavigator()
 
 export default function Navigation() {
   const dispatch = useAppDispatch()
-  const hasAccessToken = useSelector((state: RootState) => state.auth.accessToken) === AccessTokenState.Found
-  const username = useSelector((state: RootState) => state.auth.username)
+  const hasAccessToken =
+    useSelector((state: RootState) => state.auth.accessToken) === AccessTokenState.Found
+  const id = useSelector((state: RootState) => state.auth.id)
 
   useEffect(() => {
     dispatch(checkToken())
   }, [])
 
   useEffect(() => {
-    if (username) dispatch(getProfile(username))
-  }, [username])
+    if (id) dispatch(getProfile(id))
+  }, [id])
 
   return (
     <NavigationContainer>

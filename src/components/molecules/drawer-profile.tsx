@@ -1,25 +1,25 @@
 import React from 'react'
 import { useSafeArea } from 'react-native-safe-area-context'
+import { FullUser } from 'twitter-d'
 
 import { ProfileImage } from '@atoms'
 import { Text, View } from '@styled'
 
-import { Profile } from '../../api'
-
-interface DrawerProfileProps {
-  profile: Profile
+interface DrawerProps {
+  profile: FullUser
 }
 
-export const DrawerProfile = ({ profile }: DrawerProfileProps) => {
-  const { name, profileImage, username } = profile
+export const DrawerProfile = (props: DrawerProps) => {
+  const { name, profile_image_url_https, screen_name } = props.profile
+  const profileImage = profile_image_url_https.replace('_normal', '')
   const insets = useSafeArea()
 
   return (
     <View sx={{ p: 3, pt: insets.top * 1.5 }}>
-      <ProfileImage uri={profileImage} size={60} borderRadius={100} />
+      <ProfileImage uri={profileImage} size={64} borderRadius={100} />
       <View sx={{ pt: 2 }}>
         <Text sx={{ fontSize: 18, fontWeight: 700 }}>{name}</Text>
-        <Text sx={{ fontSize: 16, fontWeight: 300 }}>@{username}</Text>
+        <Text sx={{ fontSize: 16, fontWeight: 300 }}>@{screen_name}</Text>
       </View>
     </View>
   )
