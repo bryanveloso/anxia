@@ -15,19 +15,16 @@ import TimelineNavigation from './timeline'
 const Drawer = createDrawerNavigator()
 
 export default function Navigation() {
-  const hasAccessToken = useSelector((state: RootState) => state.auth.accessToken) === AccessTokenState.Found
-  const { username } = useSelector((state: RootState) => state.auth)
-
   const dispatch = useAppDispatch()
+  const hasAccessToken = useSelector((state: RootState) => state.auth.accessToken) === AccessTokenState.Found
+  const username = useSelector((state: RootState) => state.auth.username)
 
   useEffect(() => {
     dispatch(checkToken())
   }, [])
 
   useEffect(() => {
-    if (username) {
-      dispatch(getProfile(username))
-    }
+    if (username) dispatch(getProfile(username))
   }, [username])
 
   return (
@@ -35,9 +32,13 @@ export default function Navigation() {
       {hasAccessToken ? (
         <Drawer.Navigator
           initialRouteName="Timeline"
-          drawerType="slide"
           hideStatusBar
-          drawerContent={(props) => <DrawerContent {...props} />}>
+          drawerContent={(props) => <DrawerContent {...props} />}
+          drawerContentOptions={{
+            activeBackgroundColor: 'transparent',
+            contentContainerStyle: { paddingTop: 0 },
+            labelStyle: { fontSize: 16 },
+          }}>
           <Drawer.Screen name="Timeline" component={TimelineNavigation} />
           <Drawer.Screen name="Mentions" component={MentionsNavigation} />
         </Drawer.Navigator>

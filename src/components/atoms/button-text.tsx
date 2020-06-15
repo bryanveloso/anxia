@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Text } from '../styled'
+import { Text } from '@styled'
 
 interface ButtonTextProps {
   color: string
