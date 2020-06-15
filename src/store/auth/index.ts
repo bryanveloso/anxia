@@ -1,7 +1,7 @@
 import { createSlice, Dispatch, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import * as SecureStore from 'expo-secure-store'
 
-import Twitter from '../../api/Twitter'
+import Twitter from '../../api'
 
 export enum AccessTokenState {
   Unknown,
@@ -10,18 +10,26 @@ export enum AccessTokenState {
 }
 
 export const checkToken = createAsyncThunk('auth/checkToken', async () => {
-  await Twitter.getCredentials()
+  return Twitter.getCredentials()
 })
 
 export const login = createAsyncThunk('auth/login', async (dispatch: any) => {
   const accessToken = await Twitter.login()
   if (!accessToken) throw new Error()
+  console.log('accessToken', accessToken)
 
-  SecureStore.setItemAsync('accessToken', accessToken.token)
-  SecureStore.setItemAsync('accessTokenSecret', accessToken.tokenSecret)
-  SecureStore.setItemAsync('id', accessToken.id)
-  SecureStore.setItemAsync('username', accessToken.username)
+  await SecureStore.setItemAsync('accessToken', accessToken.token)
+  await SecureStore.setItemAsync('accessTokenSecret', accessToken.tokenSecret)
+  await SecureStore.setItemAsync('id', accessToken.id)
+  await SecureStore.setItemAsync('username', accessToken.username)
   return accessToken
+})
+
+export const logout = createAsyncThunk('auth/logout', async () => {
+  await SecureStore.deleteItemAsync('accessToken')
+  await SecureStore.deleteItemAsync('accessTokenSecret')
+  await SecureStore.deleteItemAsync('id')
+  await SecureStore.deleteItemAsync('username')
 })
 
 const authSlice = createSlice({
@@ -31,26 +39,22 @@ const authSlice = createSlice({
     id: '',
     username: '',
   },
-  reducers: {
-    logout(state, action: PayloadAction<string | undefined>) {
-      SecureStore.deleteItemAsync('accessToken')
-      SecureStore.deleteItemAsync('accessTokenSecret')
-      SecureStore.deleteItemAsync('id')
-      SecureStore.deleteItemAsync('username')
-      state.accessToken = AccessTokenState.Unknown
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
+    //...
     builder.addCase(checkToken.pending, (state) => {
       state.accessToken = AccessTokenState.Fetching
     })
     builder.addCase(checkToken.rejected, (state) => {
       state.accessToken = AccessTokenState.Unknown
     })
-    builder.addCase(checkToken.fulfilled, (state) => {
+    builder.addCase(checkToken.fulfilled, (state, action) => {
       state.accessToken = AccessTokenState.Found
+      state.id = action.payload.id
+      state.username = action.payload.username
     })
 
+    //...
     builder.addCase(login.pending, (state) => {
       state.accessToken = AccessTokenState.Fetching
     })
@@ -62,9 +66,18 @@ const authSlice = createSlice({
       state.id = action.payload.id
       state.username = action.payload.username
     })
+
+    //...
+    builder.addCase(logout.pending, (state) => {
+      state.accessToken = AccessTokenState.Found
+    })
+    builder.addCase(logout.rejected, (state) => {
+      state.accessToken = AccessTokenState.Found
+    })
+    builder.addCase(logout.fulfilled, (state, action) => {
+      state.accessToken = AccessTokenState.Unknown
+    })
   },
 })
-
-export const { logout } = authSlice.actions
 
 export default authSlice

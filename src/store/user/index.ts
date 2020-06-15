@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import Twitter, { Profile } from '../../api/Twitter'
+import Twitter, { Profile } from '../../api'
 
 export const getAccountInfo = createAsyncThunk('user/getAccountInfo', async () => {
   return Twitter.getAccountInfo()
