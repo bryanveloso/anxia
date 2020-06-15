@@ -5,9 +5,10 @@ import { enableScreens } from 'react-native-screens'
 import { Provider } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
-import Navigation from './navigation'
-import store from './store'
-import theme from './styles/theme'
+import store from '@store'
+import { theme } from '@styles'
+
+import Navigation from './navigations/root'
 
 enableScreens()
 

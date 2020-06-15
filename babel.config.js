@@ -12,6 +12,7 @@ module.exports = function (api) {
             '@assets': './src/assets',
             '@atoms': './src/components/atoms',
             '@constants': './src/constants',
+            '@navigations': './src/components/navigations',
             '@molecules': './src/components/molecules',
             '@screens': './src/screens',
             '@store': './src/store',

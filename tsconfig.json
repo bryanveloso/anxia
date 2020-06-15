@@ -22,6 +22,12 @@
       "@molecules": [
         "./components/molecules"
       ],
+      "@navigations": [
+        "./components/navigations"
+      ],
+      "@navigations/*": [
+        "./components/navigations/*"
+      ],
       "@screens": [
         "./screens"
       ],

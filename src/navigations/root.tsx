@@ -1,14 +1,15 @@
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NavigationContainer } from '@react-navigation/native'
-import AuthScreen from '@screens/auth'
-import MentionsScreen from '@screens/mentions'
-import TimelineScreen from '@screens/timeline'
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
+import { AuthScreen, MentionsScreen } from '@screens'
 import { RootState, useAppDispatch } from '@store'
 import { AccessTokenState, checkToken } from '@store/auth'
 import { getAccountInfo } from '@store/user'
+
+import MentionsNavigation from './mentions'
+import TimelineNavigation from './timeline'
 
 const Drawer = createDrawerNavigator()
 
@@ -31,8 +32,8 @@ export default function Navigation() {
     <NavigationContainer>
       {hasAccessToken ? (
         <Drawer.Navigator initialRouteName="Timeline">
-          <Drawer.Screen name="Timeline" component={TimelineScreen} />
-          <Drawer.Screen name="Mentions" component={MentionsScreen} />
+          <Drawer.Screen name="Timeline" component={TimelineNavigation} />
+          <Drawer.Screen name="Mentions" component={MentionsNavigation} />
         </Drawer.Navigator>
       ) : (
         <AuthScreen />
