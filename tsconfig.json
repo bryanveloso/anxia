@@ -28,6 +28,9 @@
       "@navigations/*": [
         "./components/navigations/*"
       ],
+      "@organisms": [
+        "./components/organisms"
+      ],
       "@screens": [
         "./screens"
       ],

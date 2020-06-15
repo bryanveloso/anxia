@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store'
 import {
   openAuthSessionAsync,
   WebBrowserAuthSessionResult as AuthSessionResult,
-  WebBrowserRedirectResult as RedirectResult
+  WebBrowserRedirectResult as RedirectResult,
 } from 'expo-web-browser'
 import { Base64 } from 'js-base64'
 
@@ -13,26 +13,41 @@ interface AuthToken {
   tokenSecret: string
 }
 
+interface AccessToken extends AuthToken {
+  id: string
+  username: string
+}
+
 interface TwitterOptions {
   twitter: {
-    host: string,
+    host: string
     endpoints: {
       authenticate: string
     }
-  },
+  }
   backend: {
-    host: string,
+    host: string
     endpoints: {
-      accountInfo: string,
-      requestToken: string,
+      accountInfo: string
+      requestToken: string
       accessToken: string
+      usersShow: string
     }
-  },
+  }
 }
 
 interface Account {
-  profilePictureURL: string
   username: string
+}
+
+export interface Profile {
+  id: string
+  name?: string
+  username: string
+  description?: string
+  profileBackground?: string
+  profileImage?: string
+  location?: string
 }
 
 export class Twitter {
@@ -45,11 +60,11 @@ export class Twitter {
   async login() {
     const redirectURI = AuthSession.makeRedirectUri()
     const { token } = await this.getRequestToken(redirectURI)
-    const { host, endpoints: { authenticate } } = this.options.twitter
-    const authRes = await openAuthSessionAsync(
-      `${host}${authenticate}?oauth_token=${token}`,
-      redirectURI,
-    )
+    const {
+      host,
+      endpoints: { authenticate },
+    } = this.options.twitter
+    const authRes = await openAuthSessionAsync(`${host}${authenticate}?oauth_token=${token}`, redirectURI)
 
     if (this.isRedirectResult(authRes)) {
       const verifier = this.getVerifierFromURL(authRes.url)
@@ -59,42 +74,44 @@ export class Twitter {
     }
   }
 
-  isRedirectResult(
-    res: AuthSessionResult
-  ): res is RedirectResult {
-    return !!(res as RedirectResult).url;
+  isRedirectResult(res: AuthSessionResult): res is RedirectResult {
+    return !!(res as RedirectResult).url
   }
 
   private async getRequestToken(redirect: string): Promise<AuthToken> {
     const url = `${this.options.backend.host}${this.options.backend.endpoints.requestToken}?callback_url=${redirect}`
-    const response = await fetch(url);
+    const response = await fetch(url)
     const { oauth_token, oauth_token_secret } = await response.json()
     return { token: oauth_token, tokenSecret: oauth_token_secret }
   }
 
-  private async getAccessToken(requestToken: string, verifier: string): Promise<AuthToken> {
+  private async getAccessToken(requestToken: string, verifier: string): Promise<AccessToken> {
     const response = await fetch(
-      `${this.options.backend.host}${this.options.backend.endpoints.accessToken}?oauth_verifier=${verifier}&oauth_token=${requestToken}`
+      `${this.options.backend.host}${this.options.backend.endpoints.accessToken}?oauth_verifier=${verifier}&oauth_token=${requestToken}`,
     )
 
-    const { oauth_token, oauth_token_secret } = await response.json()
-    return { token: oauth_token, tokenSecret: oauth_token_secret }
+    const { oauth_token, oauth_token_secret, user_id, screen_name } = await response.json()
+    return { id: user_id, token: oauth_token, tokenSecret: oauth_token_secret, username: screen_name }
   }
 
   private getVerifierFromURL(url: string) {
     const q = Linking.parse(url).queryParams
-    if (q) { return q['oauth_verifier'] }
+    if (q) {
+      return q['oauth_verifier']
+    }
   }
 
-  async getCredentials(): Promise<AuthToken> {
+  async getCredentials(): Promise<AccessToken> {
+    const id = await SecureStore.getItemAsync('id')
     const token = await SecureStore.getItemAsync('accessToken')
     const tokenSecret = await SecureStore.getItemAsync('accessTokenSecret')
+    const username = await SecureStore.getItemAsync('accessTokenSecret')
 
-    if (!token || !tokenSecret) {
-      throw new Error("Missing or incomplete credentials.")
+    if (!id || !token || !tokenSecret || !username) {
+      throw new Error('Missing or incomplete credentials.')
     }
 
-    return { token, tokenSecret }
+    return { id, token, tokenSecret, username }
   }
 
   private async prepareAuth() {
@@ -108,8 +125,27 @@ export class Twitter {
     const header = await this.prepareAuth()
     request.headers.set('Authorization', header)
 
-    const { profilePictureURL, username } = await (await fetch(request)).json()
-    return { profilePictureURL, username }
+    const { screen_name } = await (await fetch(request)).json()
+    return { username: screen_name }
+  }
+
+  async getUserInfo(username: string): Promise<Profile> {
+    const request = new Request(
+      `${this.options.backend.host}${this.options.backend.endpoints.usersShow}?screen_name=${username}`,
+    )
+    const header = await this.prepareAuth()
+    request.headers.set('Authorization', header)
+
+    const response = await (await fetch(request)).json()
+    return {
+      id: response.id_str,
+      name: response.name,
+      username: response.screen_name,
+      description: response.description,
+      profileBackground: response.profile_image_url_https,
+      profileImage: response.profile_image_url_https,
+      location: response.location,
+    }
   }
 }
 
@@ -123,9 +159,10 @@ const defaultOptions = {
   backend: {
     host: 'https://proxy.anxia.app',
     endpoints: {
+      accessToken: '/auth/access_token',
       accountInfo: '/account/settings',
       requestToken: '/auth/request_token',
-      accessToken: '/auth/access_token',
+      usersShow: '/users/show',
     },
   },
 }

@@ -19,17 +19,24 @@ export const login = createAsyncThunk('auth/login', async (dispatch: any) => {
 
   SecureStore.setItemAsync('accessToken', accessToken.token)
   SecureStore.setItemAsync('accessTokenSecret', accessToken.tokenSecret)
+  SecureStore.setItemAsync('id', accessToken.id)
+  SecureStore.setItemAsync('username', accessToken.username)
+  return accessToken
 })
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
     accessToken: AccessTokenState.Unknown,
+    id: '',
+    username: '',
   },
   reducers: {
     logout(state, action: PayloadAction<string | undefined>) {
       SecureStore.deleteItemAsync('accessToken')
       SecureStore.deleteItemAsync('accessTokenSecret')
+      SecureStore.deleteItemAsync('id')
+      SecureStore.deleteItemAsync('username')
       state.accessToken = AccessTokenState.Unknown
     },
   },
@@ -50,8 +57,10 @@ const authSlice = createSlice({
     builder.addCase(login.rejected, (state) => {
       state.accessToken = AccessTokenState.Unknown
     })
-    builder.addCase(login.fulfilled, (state) => {
+    builder.addCase(login.fulfilled, (state, action) => {
       state.accessToken = AccessTokenState.Found
+      state.id = action.payload.id
+      state.username = action.payload.username
     })
   },
 })

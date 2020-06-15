@@ -1,4 +1,5 @@
 module.exports = {
+  globals: { Request: false },
   root: true,
   extends: ['universe/native', 'universe/shared/typescript-analysis'],
   overrides: [

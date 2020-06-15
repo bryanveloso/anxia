@@ -14,6 +14,7 @@ module.exports = function (api) {
             '@constants': './src/constants',
             '@navigations': './src/components/navigations',
             '@molecules': './src/components/molecules',
+            '@organisms': './src/components/organisms',
             '@screens': './src/screens',
             '@store': './src/store',
             '@styled': './src/components/styled',

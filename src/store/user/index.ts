@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import Twitter from '../../api/Twitter'
 
-export const getAccountInfo = createAsyncThunk(
-  'user/getAccountInfo',
-  async () => {
-    return Twitter.getAccountInfo()
-  },
-)
+import Twitter, { Profile } from '../../api/Twitter'
+
+export const getAccountInfo = createAsyncThunk('user/getAccountInfo', async () => {
+  return Twitter.getAccountInfo()
+})
+
+export const getProfile = createAsyncThunk('user/getProfile', async (username: string) => {
+  return Twitter.getUserInfo(username)
+})
 
 export enum LoadingState {
   Unknown,
@@ -15,32 +17,27 @@ export enum LoadingState {
 }
 
 interface State {
-    accountInfo: {
-        profilePictureURL: LoadingState | string,
-        username?: string
-    },
+  profile: Profile
 }
 
 const initialState: State = {
-  accountInfo: { profilePictureURL: LoadingState.Unknown, username: undefined },
+  profile: {
+    id: '',
+    username: '',
+  },
 }
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
-  extraReducers: builder => {
-    builder.addCase(getAccountInfo.pending, (state) => {
-      state.accountInfo.profilePictureURL = LoadingState.Fetching
+  extraReducers: (builder) => {
+    builder.addCase(getProfile.pending, (state) => {})
+    builder.addCase(getProfile.rejected, (state) => {})
+    builder.addCase(getProfile.fulfilled, (state, action) => {
+      state.profile = action.payload
     })
-    builder.addCase(getAccountInfo.rejected, (state) => {
-      state.accountInfo.profilePictureURL = LoadingState.Unknown
-    })
-    builder.addCase(getAccountInfo.fulfilled, (state, action) => {
-      state.accountInfo.profilePictureURL = action.payload.profilePictureURL
-      state.accountInfo.username = action.payload.username
-    })    
-  }
+  },
 })
 
 export default userSlice
