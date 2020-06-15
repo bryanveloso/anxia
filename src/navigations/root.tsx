@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import { AuthScreen, MentionsScreen } from '@screens'
+import { AuthScreen } from '@screens'
 import { RootState, useAppDispatch } from '@store'
 import { AccessTokenState, checkToken } from '@store/auth'
 import { getAccountInfo } from '@store/user'

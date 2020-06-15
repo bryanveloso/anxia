@@ -1,4 +1,4 @@
-import { createSlice, Dispatch, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, Dispatch, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import * as SecureStore from 'expo-secure-store'
 
 import Twitter from '../../api/Twitter'
@@ -27,7 +27,7 @@ const authSlice = createSlice({
     accessToken: AccessTokenState.Unknown,
   },
   reducers: {
-    logout(state, action) {
+    logout(state, action: PayloadAction<string | undefined>) {
       SecureStore.deleteItemAsync('accessToken')
       SecureStore.deleteItemAsync('accessTokenSecret')
       state.accessToken = AccessTokenState.Unknown

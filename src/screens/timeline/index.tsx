@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Button, View, Text } from 'react-native'
 
-import { RootState, useAppDispatch } from '@store'
+import { useAppDispatch } from '@store'
 import { logout } from '@store/auth'
 
 export default function TimelineScreen({ navigation }) {
