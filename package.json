@@ -52,6 +52,7 @@
     "eslint-plugin-import": "^2.21.2",
     "prettier": "^2.0.5",
     "remove": "^0.1.5",
+    "twitter-d": "^0.4.0",
     "typescript": "~3.8.3"
   },
   "private": true
