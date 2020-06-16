@@ -160,7 +160,7 @@ const defaultOptions = {
     },
   },
   backend: {
-    host: 'http://localhost:3000',
+    host: 'https://proxy.anxia.app',
     endpoints: {
       accessToken: '/auth/access_token',
       requestToken: '/auth/request_token',

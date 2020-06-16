@@ -3,46 +3,29 @@
     "baseUrl": "./",
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
-    "lib": ["dom", "esnext"],
+    "lib": ["esnext"],
     "moduleResolution": "node",
     "noEmit": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
     "strict": true,
     "paths": {
-      "@api": [
-        "src/api"
-      ],
-      "@assets/*": [
-        "src/assets/*"
-      ],
-      "@atoms": [
-        "src/components/atoms"
-      ],
-      "@constants": [
-        "src/constants"
-      ],
-      "@molecules": [
-        "src/components/molecules"
-      ],
-      "@navigations/*": [
-        "src/components/navigations/*"
-      ],
-      "@organisms": [
-        "src/components/organisms"
-      ],
-      "@screens": [
-        "src/screens"
-      ],
-      "@store/*": [
-        "src/store/*"
-      ],
-      "@styled": [
-        "src/components/styled"
-      ],
-      "@styles/*": [
-        "src/styles/*"
-      ]
+      "@api": ["src/api"],
+      "@assets/*": ["src/assets/*"],
+      "@atoms": ["src/components/atoms"],
+      "@constants": ["src/constants"],
+      "@molecules": ["src/components/molecules"],
+      "@models/*": ["src/models/*"],
+      "@navigations/*": ["src/components/navigations/*"],
+      "@organisms": ["src/components/organisms"],
+      "@screens": ["src/screens"],
+      "@store": ["src/store"],
+      "@store/*": ["src/store/*"],
+      "@styled": ["src/components/styled"],
+      "@styles/*": ["src/styles/*"],
+      "@utils/*": ["src/utils/*"]
     },    
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }

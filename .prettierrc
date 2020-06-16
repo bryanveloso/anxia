@@ -1,6 +1,6 @@
 {
   "jsxBracketSameLine": true,
-  "printWidth": 120,
+  "printWidth": 100,
   "tabWidth": 2,
   "trailingComma": "all",
   "semi": false,

@@ -11,7 +11,7 @@ interface DrawerProps {
 
 export const DrawerProfile = (props: DrawerProps) => {
   const { name, profile_image_url_https, screen_name } = props.profile
-  const profileImage = profile_image_url_https.replace('_normal', '')
+  const profileImage = profile_image_url_https
   const insets = useSafeArea()
 
   return (
