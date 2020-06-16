@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { Linking } from 'expo'
 import * as AuthSession from 'expo-auth-session'
 import * as SecureStore from 'expo-secure-store'
@@ -7,6 +8,8 @@ import {
   WebBrowserRedirectResult as RedirectResult,
 } from 'expo-web-browser'
 import { Base64 } from 'js-base64'
+import { Tweet } from 'twitter'
+import { FullUser } from 'twitter-d'
 
 interface AuthToken {
   token: string
@@ -28,10 +31,10 @@ interface TwitterOptions {
   backend: {
     host: string
     endpoints: {
-      accountInfo: string
-      requestToken: string
-      homeTimeline: string
       accessToken: string
+      account: string
+      requestToken: string
+      timeline: string
       usersShow: string
     }
   }
@@ -39,16 +42,6 @@ interface TwitterOptions {
 
 interface Account {
   username: string
-}
-
-export interface Profile {
-  id: string
-  name?: string
-  username: string
-  description?: string
-  profileBackground?: string
-  profileImage?: string
-  location?: string
 }
 
 export class Twitter {
@@ -65,7 +58,10 @@ export class Twitter {
       host,
       endpoints: { authenticate },
     } = this.options.twitter
-    const authRes = await openAuthSessionAsync(`${host}${authenticate}?oauth_token=${token}`, redirectURI)
+    const authRes = await openAuthSessionAsync(
+      `${host}${authenticate}?oauth_token=${token}`,
+      redirectURI,
+    )
 
     if (this.isRedirectResult(authRes)) {
       const verifier = this.getVerifierFromURL(authRes.url)
@@ -80,19 +76,28 @@ export class Twitter {
   }
 
   private async getRequestToken(redirect: string): Promise<AuthToken> {
-    const url = `${this.options.backend.host}${this.options.backend.endpoints.requestToken}?callback_url=${redirect}`
-    const response = await fetch(url)
-    const { oauth_token, oauth_token_secret } = await response.json()
+    const url = `${this.options.backend.host}${this.options.backend.endpoints.requestToken}`
+    const response = await axios.get(url, { params: { callback_url: redirect } })
+    const { oauth_token, oauth_token_secret } = response.data
     return { token: oauth_token, tokenSecret: oauth_token_secret }
   }
 
   private async getAccessToken(requestToken: string, verifier: string): Promise<AccessToken> {
-    const response = await fetch(
-      `${this.options.backend.host}${this.options.backend.endpoints.accessToken}?oauth_verifier=${verifier}&oauth_token=${requestToken}`,
-    )
+    const url = `${this.options.backend.host}${this.options.backend.endpoints.accessToken}`
+    const response = await axios.get(url, {
+      params: {
+        oauth_verifier: verifier,
+        oauth_token: requestToken,
+      },
+    })
 
-    const { oauth_token, oauth_token_secret, user_id, screen_name } = await response.json()
-    return { id: user_id, token: oauth_token, tokenSecret: oauth_token_secret, username: screen_name }
+    const { oauth_token, oauth_token_secret, user_id, screen_name } = response.data
+    return {
+      id: user_id,
+      token: oauth_token,
+      tokenSecret: oauth_token_secret,
+      username: screen_name,
+    }
   }
 
   private getVerifierFromURL(url: string) {
@@ -117,45 +122,33 @@ export class Twitter {
 
   private async prepareAuth() {
     const credentials = await this.getCredentials()
-    const encodedCredentials = Base64.btoa(`${credentials.token}:${credentials.tokenSecret}`)
-    return encodedCredentials
+    return Base64.btoa(`${credentials.token}:${credentials.tokenSecret}`)
   }
 
-  async getAccountInfo(): Promise<Account> {
-    const request = new Request(`${this.options.backend.host}${this.options.backend.endpoints.accountInfo}`)
+  async getAccount(): Promise<Account> {
     const header = await this.prepareAuth()
-    request.headers.set('Authorization', header)
-
-    const { screen_name } = await (await fetch(request)).json()
+    const url = `${this.options.backend.host}${this.options.backend.endpoints.account}`
+    const response = await axios.get(url, { headers: { Authorization: header } })
+    const { screen_name } = response.data
     return { username: screen_name }
   }
 
-  async getUserInfo(username: string): Promise<Profile> {
-    const request = new Request(
-      `${this.options.backend.host}${this.options.backend.endpoints.usersShow}?screen_name=${username}`,
-    )
-    const header = await this.prepareAuth()
-    request.headers.set('Authorization', header)
-
-    const response = await (await fetch(request)).json()
-    return {
-      id: response.id_str,
-      name: response.name,
-      username: response.screen_name,
-      description: response.description,
-      profileBackground: response.profile_image_url_https,
-      profileImage: response.profile_image_url_https.replace('_normal', ''),
-      location: response.location,
-    }
+  async getUserInfo(id: string): Promise<FullUser> {
+    const url = `${this.options.backend.host}${this.options.backend.endpoints.usersShow}`
+    const response = await axios.get(url, { params: { user_id: id } })
+    return response.data
   }
 
-  async getHomeTimeline() {
-    const request = new Request(`${this.options.backend.host}${this.options.backend.endpoints.homeTimeline}`)
+  async getTimeline(params: Record<string, string>): Promise<Tweet[]> {
     const header = await this.prepareAuth()
-    request.headers.set('Authorization', header)
-
-    const response = await (await fetch(request)).json()
-    console.log(response)
+    const url = `${this.options.backend.host}${this.options.backend.endpoints.timeline}`
+    const response = await axios.get(url, {
+      params,
+      headers: {
+        Authorization: header,
+      },
+    })
+    return response.data
   }
 }
 
@@ -167,12 +160,12 @@ const defaultOptions = {
     },
   },
   backend: {
-    host: 'https://proxy.anxia.app',
+    host: 'http://localhost:3000',
     endpoints: {
       accessToken: '/auth/access_token',
-      accountInfo: '/account/settings',
-      homeTimeline: '/statuses/home_timeline',
       requestToken: '/auth/request_token',
+      account: '/account',
+      timeline: '/timeline',
       usersShow: '/users/show',
     },
   },
