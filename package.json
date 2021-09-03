@@ -21,7 +21,7 @@
     "expo": "~37.0.3",
     "expo-auth-session": "^1.2.1",
     "expo-secure-store": "~8.1.0",
-    "immer": "^7.0.1",
+    "immer": "^9.0.6",
     "js-base64": "^2.5.2",
     "ramda": "^0.27.0",
     "react": "~16.9.0",
