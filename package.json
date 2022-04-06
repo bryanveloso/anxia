@@ -1,0 +1,15 @@
+{
+  "name": "anxia",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "packages/expo",
+    "packages/next"
+  ],
+  "scripts": {
+    "dev:expo": "yarn workspace @anxia/expo dev",
+    "dev:next": "yarn workspace @anxia/next dev",
+    "build": "cd packages/next && yarn build",
+    "deploy": "vercel --prod --no-clipboard"
+  }
+}
