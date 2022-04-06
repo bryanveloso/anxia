@@ -2504,7 +2504,7 @@ expo-auth-session@^3.5.0:
     invariant "^2.2.4"
     qs "6.9.1"
 
-expo-constants@~13.0.0, expo-constants@~13.0.2:
+expo-constants@^13.0.2, expo-constants@~13.0.0, expo-constants@~13.0.2:
   version "13.0.2"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-13.0.2.tgz#b489ecd575cc82a9a0b3dfbf2385d45a44300eb1"
   integrity sha512-vGs/kI65vplPFvG8z4W1ariGEtVHHp9Avl28G0zJprt2v/q1E/BnXjwvFSBPc1GB+Zb/7crWSHWRwjaFULBjsg==
@@ -3544,6 +3544,11 @@ lodash.isstring@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/lodash.isstring/-/lodash.isstring-4.0.1.tgz#d527dfb5456eca7cc9bb95d5daeaf88ba54a5451"
   integrity sha1-1SfftUVuynzJu5XV2ur4i6VKVFE=
+
+lodash.merge@4.6.2:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
+  integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
 lodash.omit@^4.5.0:
   version "4.5.0"
@@ -5120,6 +5125,13 @@ statuses@~1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
   integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
+
+stitches-native@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/stitches-native/-/stitches-native-0.1.2.tgz#50afee3c52ac135ea81d9e81ade185156919b66e"
+  integrity sha512-qkQ0U8OqnEgfdIka6c7Ij0372kt/RM2c1D9EYaY1lgjavbAsHqhOQv7Q1x54NYMQuF3D3PX/55CQjvwqAJB9eQ==
+  dependencies:
+    lodash.merge "4.6.2"
 
 stream-buffers@2.2.x:
   version "2.2.0"

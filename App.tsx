@@ -1,54 +1,71 @@
 import * as React from 'react';
 import * as WebBrowser from 'expo-web-browser';
-import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
-import { Button, Platform } from 'react-native';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { makeRedirectUri, useAuthRequest, exchangeCodeAsync } from 'expo-auth-session'
+import { Button, Platform } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 
-const useProxy = Platform.select({ web: false, default: true });
+import { CLIENT_ID } from './src/auth/constants'
+import { useLogin } from './src/auth/hooks'
 
-WebBrowser.maybeCompleteAuthSession();
+const useProxy = Platform.select({ web: false, default: true })
+
+WebBrowser.maybeCompleteAuthSession()
 
 // Endpoint
 const discovery = {
   authorizationEndpoint: 'https://twitter.com/i/oauth2/authorize',
   tokenEndpoint: 'https://twitter.com/i/oauth2/token',
   revocationEndpoint: 'https://twitter.com/i/oauth2/revoke',
-};
+}
+
+// const client = new TwitterApi({
+//   clientId: 'KxDCEmHAzU6EwIxNDQ9mzrpKr',
+//   clientSecret: 'CLloDlSIQ7m6g1GreWvsC7JKZsEwk3M4j3w3oW6lwuyd901MaC',
+// })
+
+const redirectUri = makeRedirectUri({ useProxy })
 
 export default function App() {
-  const [request, response, promptAsync] = useAuthRequest(
-    {
-      clientId: 'RlZaYjdOVW1TYlhKRWsycXBmNEs6MTpjaQ',
-      clientSecret: 'z6EeEp6858TSq11BazGSYWVNBo7ONK-Rd6qaBBZtrI_FLFAB9P',
-      redirectUri: makeRedirectUri({
-        useProxy,
-      }),
-      usePKCE: true,
-      scopes: ['tweet.read'],
-    },
-    discovery
-  );
+  const { login, logout, loginReady, loggedIn } = useLogin()
+  // const [request, response, promptAsync] = useAuthRequest(
+  //   {
+  //     clientId: CLIENT_ID,
+  //     clientSecret: 'z6EeEp6858TSq11BazGSYWVNBo7ONK-Rd6qaBBZtrI_FLFAB9P',
+  //     redirectUri,
+  //     usePKCE: true,
+  //     scopes: ['tweet.read'],
+  //   },
+  //   discovery,
+  // )
 
-  React.useEffect(() => {
-    console.log(response);
+  // const exchangeCode = React.useCallback(async (code) => {
+  //   const result = await exchangeCodeAsync(
+  //     {
+  //       clientId: CLIENT_ID,
+  //       code,
+  //       redirectUri,
+  //       clientSecret: '',
+  //     },
+  //     discovery,
+  //   )
+  // }, [])
 
-    if (response?.type === 'success') {
-      const { code } = response.params;
-      console.log(code);
-    }
-  }, [response]);
+  // React.useEffect(() => {
+  //   console.log(response)
+
+  //   if (response?.type === 'success') {
+  //     const { code } = response.params
+  //     const res = exchangeCode(code)
+  //       .then((res) => console.log(res))
+  //       .catch(console.error)
+  //   }
+  // }, [response, exchangeCode])
 
   return (
     <View style={styles.container}>
-      <Button
-        disabled={!request}
-        title="Login"
-        onPress={() => {
-          promptAsync({ useProxy });
-        }}
-      />
+      <Button disabled={!loginReady} title="Login" onPress={login} />
     </View>
-  );
+  )
 }
 
 // import React, { useCallback, useState } from 'react';

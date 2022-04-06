@@ -12,12 +12,14 @@
   "dependencies": {
     "expo": "~44.0.0",
     "expo-auth-session": "^3.5.0",
+    "expo-constants": "^13.0.2",
     "expo-random": "^12.1.2",
     "expo-status-bar": "~1.2.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
     "react-native-web": "0.17.1",
+    "stitches-native": "^0.1.2",
     "twitter-api-v2": "^1.11.2"
   },
   "devDependencies": {
