@@ -1,5 +1,5 @@
-import NextAuth from 'next-auth'
-import TwitterProvider from 'next-auth/providers/twitter'
+import NextAuth from 'next-auth';
+import TwitterProvider from 'next-auth/providers/twitter';
 
 export default NextAuth({
   providers: [
@@ -9,4 +9,4 @@ export default NextAuth({
       version: '2.0',
     }),
   ],
-})
+});
